@@ -1,0 +1,32 @@
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "*/migrations/*",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+]
+ignore = [
+    "E501", # line too long (handled by formatter)
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py313']
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | __pycache__
+  | migrations
+)/
+'''

@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm Ivory & Champagne Palette */
+    --background: 40 33% 98%; /* #fcfbf9 warm ivory */
+    --foreground: 224 25% 12%; /* deep charcoal #161a22 */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 224 25% 12%;
+    
+    /* Violet / Royal Celebration Accent */
+    --primary: 258 75% 58%; /* #7c3aed */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 40 20% 94%; /* subtle champagne tint */
+    --secondary-foreground: 224 25% 16%;
+    
+    --muted: 40 20% 93%;
+    --muted-foreground: 220 12% 46%;
+    
+    --accent: 38 92% 50%; /* champagne gold / amber celebration */
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 40 18% 90%;
+    --ring: 258 75% 58%;
+    --radius: 0.75rem; /* modern rounded curve */
+  }
+
+  .dark {
+    --background: 224 30% 8%;
+    --foreground: 40 20% 96%;
+    
+    --card: 224 28% 11%;
+    --card-foreground: 40 20% 96%;
+    
+    --primary: 258 85% 65%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 224 24% 15%;
+    --secondary-foreground: 40 20% 96%;
+    
+    --muted: 224 24% 15%;
+    --muted-foreground: 220 12% 65%;
+    
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 224 20% 18%;
+    --ring: 258 85% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-brand-100 selection:text-brand-900;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

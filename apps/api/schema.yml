@@ -1,0 +1,2592 @@
+openapi: 3.0.3
+info:
+  title: Celebra API
+  version: 0.1.0
+  description: Event planning platform – backend API.
+paths:
+  /api/ai/budget/:
+    post:
+      operationId: ai_budget_create
+      description: POST /api/ai/budget/ – suggest categorical budget allocation breakdown.
+      tags:
+      - ai
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/ai/invite/:
+    post:
+      operationId: ai_invite_create
+      description: POST /api/ai/invite/ – generate invitation text and subject lines.
+      tags:
+      - ai
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/ai/plan/:
+    post:
+      operationId: ai_plan_create
+      description: POST /api/ai/plan/ – generate strategic blueprint for an event.
+      tags:
+      - ai
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/ai/status/:
+    get:
+      operationId: ai_status_retrieve
+      description: GET /api/ai/status/ – check assistant readiness and operational
+        status.
+      tags:
+      - ai
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/ai/tasks/:
+    post:
+      operationId: ai_tasks_create
+      description: POST /api/ai/tasks/ – suggest prioritized checklist.
+      tags:
+      - ai
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: POST /api/auth/login/
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      description: POST /api/auth/logout/
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/auth/me/:
+    get:
+      operationId: auth_me_retrieve
+      description: GET /api/auth/me/ – return the current authenticated user.
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/auth/password-reset/:
+    post:
+      operationId: auth_password_reset_create
+      description: POST /api/auth/password-reset/
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/password-reset/confirm/:
+    post:
+      operationId: auth_password_reset_confirm_create
+      description: POST /api/auth/password-reset/confirm/
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/register/:
+    post:
+      operationId: auth_register_create
+      description: POST /api/auth/register/
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/budget/{event_id}/categories/:
+    get:
+      operationId: budget_categories_retrieve
+      description: GET /api/budget/{event_id}/categories/ and POST /api/budget/{event_id}/categories/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: budget_categories_create
+      description: GET /api/budget/{event_id}/categories/ and POST /api/budget/{event_id}/categories/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/budget/{event_id}/categories/{id}/:
+    get:
+      operationId: budget_categories_retrieve_2
+      description: GET, PATCH, DELETE /api/budget/{event_id}/categories/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: budget_categories_partial_update
+      description: GET, PATCH, DELETE /api/budget/{event_id}/categories/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: budget_categories_destroy
+      description: GET, PATCH, DELETE /api/budget/{event_id}/categories/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/budget/{event_id}/expenses/:
+    get:
+      operationId: budget_expenses_retrieve
+      description: GET /api/budget/{event_id}/expenses/ and POST /api/budget/{event_id}/expenses/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: budget_expenses_create
+      description: GET /api/budget/{event_id}/expenses/ and POST /api/budget/{event_id}/expenses/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/budget/{event_id}/expenses/{id}/:
+    get:
+      operationId: budget_expenses_retrieve_2
+      description: GET, PATCH, DELETE /api/budget/{event_id}/expenses/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: budget_expenses_partial_update
+      description: GET, PATCH, DELETE /api/budget/{event_id}/expenses/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: budget_expenses_destroy
+      description: GET, PATCH, DELETE /api/budget/{event_id}/expenses/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/budget/{event_id}/summary/:
+    get:
+      operationId: budget_summary_retrieve
+      description: GET /api/budget/{event_id}/summary/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - budget
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/events/:
+    get:
+      operationId: events_retrieve
+      description: GET /api/events/ - list user's events; POST /api/events/ - create
+        event.
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: events_create
+      description: GET /api/events/ - list user's events; POST /api/events/ - create
+        event.
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/events/{id}/:
+    get:
+      operationId: events_retrieve_2
+      description: GET /api/events/{id}/, PUT/PATCH /api/events/{id}/, DELETE /api/events/{id}/.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: events_update
+      description: GET /api/events/{id}/, PUT/PATCH /api/events/{id}/, DELETE /api/events/{id}/.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: events_partial_update
+      description: GET /api/events/{id}/, PUT/PATCH /api/events/{id}/, DELETE /api/events/{id}/.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: events_destroy
+      description: GET /api/events/{id}/, PUT/PATCH /api/events/{id}/, DELETE /api/events/{id}/.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/events/{id}/cancel/:
+    post:
+      operationId: events_cancel_create
+      description: POST /api/events/{id}/cancel/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/events/{id}/duplicate/:
+    post:
+      operationId: events_duplicate_create
+      description: POST /api/events/{id}/duplicate/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/events/{id}/members/:
+    get:
+      operationId: events_members_retrieve
+      description: GET /api/events/{id}/members/ and POST /api/events/{id}/members/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: events_members_create
+      description: GET /api/events/{id}/members/ and POST /api/events/{id}/members/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/events/{id}/members/{member_id}/:
+    delete:
+      operationId: events_members_destroy
+      description: DELETE /api/events/{id}/members/{member_id}/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/events/{id}/transition/:
+    post:
+      operationId: events_transition_create
+      description: POST /api/events/{id}/transition/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - events
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/guests/{event_id}/:
+    get:
+      operationId: guests_retrieve
+      description: GET /api/events/{event_id}/guests/ and POST /api/events/{event_id}/guests/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: guests_create
+      description: GET /api/events/{event_id}/guests/ and POST /api/events/{event_id}/guests/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/guests/{event_id}/{id}/:
+    get:
+      operationId: guests_retrieve_2
+      description: GET, PATCH, DELETE /api/events/{event_id}/guests/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: guests_partial_update
+      description: GET, PATCH, DELETE /api/events/{event_id}/guests/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: guests_destroy
+      description: GET, PATCH, DELETE /api/events/{event_id}/guests/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/guests/{event_id}/{id}/invite-token/:
+    post:
+      operationId: guests_invite_token_create
+      description: POST /api/events/{event_id}/guests/{pk}/invite-token/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/guests/{event_id}/{id}/revoke-token/:
+    post:
+      operationId: guests_revoke_token_create
+      description: POST /api/events/{event_id}/guests/{pk}/revoke-token/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/guests/{event_id}/import-csv/:
+    post:
+      operationId: guests_import_csv_create
+      description: POST /api/events/{event_id}/guests/import-csv/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/guests/{event_id}/summary/:
+    get:
+      operationId: guests_summary_retrieve
+      description: GET /api/events/{event_id}/rsvp-summary/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/guests/rsvp/:
+    get:
+      operationId: guests_rsvp_retrieve
+      description: |-
+        Public endpoint for guests responding to an invite.
+        GET /api/guests/rsvp/?token=<raw_token> -> fetch event details & current rsvp
+        POST /api/guests/rsvp/ -> submit rsvp
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: guests_rsvp_create
+      description: |-
+        Public endpoint for guests responding to an invite.
+        GET /api/guests/rsvp/?token=<raw_token> -> fetch event details & current rsvp
+        POST /api/guests/rsvp/ -> submit rsvp
+      tags:
+      - guests
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/notifications/:
+    get:
+      operationId: notifications_retrieve
+      description: GET /api/notifications/ – list user notifications.
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/notifications/{id}/:
+    patch:
+      operationId: notifications_partial_update
+      description: PATCH /api/notifications/{pk}/ – mark as read; DELETE /api/notifications/{pk}/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: notifications_destroy
+      description: PATCH /api/notifications/{pk}/ – mark as read; DELETE /api/notifications/{pk}/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/notifications/mark-all-read/:
+    post:
+      operationId: notifications_mark_all_read_create
+      description: POST /api/notifications/mark-all-read/
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/notifications/unread-count/:
+    get:
+      operationId: notifications_unread_count_retrieve
+      description: GET /api/notifications/unread-count/
+      tags:
+      - notifications
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/tasks/{event_id}/:
+    get:
+      operationId: tasks_retrieve
+      description: GET /api/tasks/{event_id}/ and POST /api/tasks/{event_id}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: tasks_create
+      description: GET /api/tasks/{event_id}/ and POST /api/tasks/{event_id}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/tasks/{event_id}/{id}/:
+    get:
+      operationId: tasks_retrieve_2
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: tasks_partial_update
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: tasks_destroy
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/tasks/{event_id}/schedule/:
+    get:
+      operationId: tasks_schedule_retrieve
+      description: GET /api/tasks/{event_id}/schedule/ and POST /api/tasks/{event_id}/schedule/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: tasks_schedule_create
+      description: GET /api/tasks/{event_id}/schedule/ and POST /api/tasks/{event_id}/schedule/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/tasks/{event_id}/schedule-conflicts/:
+    get:
+      operationId: tasks_schedule_conflicts_retrieve
+      description: GET /api/tasks/{event_id}/schedule/conflicts/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/tasks/{event_id}/schedule/{id}/:
+    get:
+      operationId: tasks_schedule_retrieve_2
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/schedule/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: tasks_schedule_partial_update
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/schedule/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: tasks_schedule_destroy
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/schedule/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - tasks
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/ai/budget/:
+    post:
+      operationId: v1_ai_budget_create
+      description: POST /api/ai/budget/ – suggest categorical budget allocation breakdown.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/ai/invite/:
+    post:
+      operationId: v1_ai_invite_create
+      description: POST /api/ai/invite/ – generate invitation text and subject lines.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/ai/plan/:
+    post:
+      operationId: v1_ai_plan_create
+      description: POST /api/ai/plan/ – generate strategic blueprint for an event.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/ai/status/:
+    get:
+      operationId: v1_ai_status_retrieve
+      description: GET /api/ai/status/ – check assistant readiness and operational
+        status.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/ai/tasks/:
+    post:
+      operationId: v1_ai_tasks_create
+      description: POST /api/ai/tasks/ – suggest prioritized checklist.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/login/:
+    post:
+      operationId: v1_auth_login_create
+      description: POST /api/auth/login/
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/logout/:
+    post:
+      operationId: v1_auth_logout_create
+      description: POST /api/auth/logout/
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/me/:
+    get:
+      operationId: v1_auth_me_retrieve
+      description: GET /api/auth/me/ – return the current authenticated user.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/password-reset/:
+    post:
+      operationId: v1_auth_password_reset_create
+      description: POST /api/auth/password-reset/
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/password-reset/confirm/:
+    post:
+      operationId: v1_auth_password_reset_confirm_create
+      description: POST /api/auth/password-reset/confirm/
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/register/:
+    post:
+      operationId: v1_auth_register_create
+      description: POST /api/auth/register/
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/budget/{event_id}/categories/:
+    get:
+      operationId: v1_budget_categories_retrieve
+      description: GET /api/budget/{event_id}/categories/ and POST /api/budget/{event_id}/categories/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_budget_categories_create
+      description: GET /api/budget/{event_id}/categories/ and POST /api/budget/{event_id}/categories/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/budget/{event_id}/categories/{id}/:
+    get:
+      operationId: v1_budget_categories_retrieve_2
+      description: GET, PATCH, DELETE /api/budget/{event_id}/categories/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_budget_categories_partial_update
+      description: GET, PATCH, DELETE /api/budget/{event_id}/categories/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: v1_budget_categories_destroy
+      description: GET, PATCH, DELETE /api/budget/{event_id}/categories/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/budget/{event_id}/expenses/:
+    get:
+      operationId: v1_budget_expenses_retrieve
+      description: GET /api/budget/{event_id}/expenses/ and POST /api/budget/{event_id}/expenses/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_budget_expenses_create
+      description: GET /api/budget/{event_id}/expenses/ and POST /api/budget/{event_id}/expenses/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/budget/{event_id}/expenses/{id}/:
+    get:
+      operationId: v1_budget_expenses_retrieve_2
+      description: GET, PATCH, DELETE /api/budget/{event_id}/expenses/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_budget_expenses_partial_update
+      description: GET, PATCH, DELETE /api/budget/{event_id}/expenses/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: v1_budget_expenses_destroy
+      description: GET, PATCH, DELETE /api/budget/{event_id}/expenses/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/budget/{event_id}/summary/:
+    get:
+      operationId: v1_budget_summary_retrieve
+      description: GET /api/budget/{event_id}/summary/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/events/:
+    get:
+      operationId: v1_events_retrieve
+      description: GET /api/events/ - list user's events; POST /api/events/ - create
+        event.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_events_create
+      description: GET /api/events/ - list user's events; POST /api/events/ - create
+        event.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/events/{id}/:
+    get:
+      operationId: v1_events_retrieve_2
+      description: GET /api/events/{id}/, PUT/PATCH /api/events/{id}/, DELETE /api/events/{id}/.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: v1_events_update
+      description: GET /api/events/{id}/, PUT/PATCH /api/events/{id}/, DELETE /api/events/{id}/.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_events_partial_update
+      description: GET /api/events/{id}/, PUT/PATCH /api/events/{id}/, DELETE /api/events/{id}/.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: v1_events_destroy
+      description: GET /api/events/{id}/, PUT/PATCH /api/events/{id}/, DELETE /api/events/{id}/.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/events/{id}/cancel/:
+    post:
+      operationId: v1_events_cancel_create
+      description: POST /api/events/{id}/cancel/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/events/{id}/duplicate/:
+    post:
+      operationId: v1_events_duplicate_create
+      description: POST /api/events/{id}/duplicate/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/events/{id}/members/:
+    get:
+      operationId: v1_events_members_retrieve
+      description: GET /api/events/{id}/members/ and POST /api/events/{id}/members/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_events_members_create
+      description: GET /api/events/{id}/members/ and POST /api/events/{id}/members/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/events/{id}/members/{member_id}/:
+    delete:
+      operationId: v1_events_members_destroy
+      description: DELETE /api/events/{id}/members/{member_id}/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: member_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/events/{id}/transition/:
+    post:
+      operationId: v1_events_transition_create
+      description: POST /api/events/{id}/transition/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/guests/{event_id}/:
+    get:
+      operationId: v1_guests_retrieve
+      description: GET /api/events/{event_id}/guests/ and POST /api/events/{event_id}/guests/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_guests_create
+      description: GET /api/events/{event_id}/guests/ and POST /api/events/{event_id}/guests/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/guests/{event_id}/{id}/:
+    get:
+      operationId: v1_guests_retrieve_2
+      description: GET, PATCH, DELETE /api/events/{event_id}/guests/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_guests_partial_update
+      description: GET, PATCH, DELETE /api/events/{event_id}/guests/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: v1_guests_destroy
+      description: GET, PATCH, DELETE /api/events/{event_id}/guests/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/guests/{event_id}/{id}/invite-token/:
+    post:
+      operationId: v1_guests_invite_token_create
+      description: POST /api/events/{event_id}/guests/{pk}/invite-token/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/guests/{event_id}/{id}/revoke-token/:
+    post:
+      operationId: v1_guests_revoke_token_create
+      description: POST /api/events/{event_id}/guests/{pk}/revoke-token/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/guests/{event_id}/import-csv/:
+    post:
+      operationId: v1_guests_import_csv_create
+      description: POST /api/events/{event_id}/guests/import-csv/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/guests/{event_id}/summary/:
+    get:
+      operationId: v1_guests_summary_retrieve
+      description: GET /api/events/{event_id}/rsvp-summary/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/guests/rsvp/:
+    get:
+      operationId: v1_guests_rsvp_retrieve
+      description: |-
+        Public endpoint for guests responding to an invite.
+        GET /api/guests/rsvp/?token=<raw_token> -> fetch event details & current rsvp
+        POST /api/guests/rsvp/ -> submit rsvp
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_guests_rsvp_create
+      description: |-
+        Public endpoint for guests responding to an invite.
+        GET /api/guests/rsvp/?token=<raw_token> -> fetch event details & current rsvp
+        POST /api/guests/rsvp/ -> submit rsvp
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/notifications/:
+    get:
+      operationId: v1_notifications_retrieve
+      description: GET /api/notifications/ – list user notifications.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/notifications/{id}/:
+    patch:
+      operationId: v1_notifications_partial_update
+      description: PATCH /api/notifications/{pk}/ – mark as read; DELETE /api/notifications/{pk}/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: v1_notifications_destroy
+      description: PATCH /api/notifications/{pk}/ – mark as read; DELETE /api/notifications/{pk}/
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/notifications/mark-all-read/:
+    post:
+      operationId: v1_notifications_mark_all_read_create
+      description: POST /api/notifications/mark-all-read/
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/notifications/unread-count/:
+    get:
+      operationId: v1_notifications_unread_count_retrieve
+      description: GET /api/notifications/unread-count/
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tasks/{event_id}/:
+    get:
+      operationId: v1_tasks_retrieve
+      description: GET /api/tasks/{event_id}/ and POST /api/tasks/{event_id}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_tasks_create
+      description: GET /api/tasks/{event_id}/ and POST /api/tasks/{event_id}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tasks/{event_id}/{id}/:
+    get:
+      operationId: v1_tasks_retrieve_2
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_tasks_partial_update
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: v1_tasks_destroy
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/tasks/{event_id}/schedule/:
+    get:
+      operationId: v1_tasks_schedule_retrieve
+      description: GET /api/tasks/{event_id}/schedule/ and POST /api/tasks/{event_id}/schedule/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_tasks_schedule_create
+      description: GET /api/tasks/{event_id}/schedule/ and POST /api/tasks/{event_id}/schedule/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tasks/{event_id}/schedule-conflicts/:
+    get:
+      operationId: v1_tasks_schedule_conflicts_retrieve
+      description: GET /api/tasks/{event_id}/schedule/conflicts/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/tasks/{event_id}/schedule/{id}/:
+    get:
+      operationId: v1_tasks_schedule_retrieve_2
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/schedule/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_tasks_schedule_partial_update
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/schedule/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: v1_tasks_schedule_destroy
+      description: GET, PATCH, DELETE /api/tasks/{event_id}/schedule/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/vendors/:
+    get:
+      operationId: v1_vendors_retrieve
+      description: GET /api/vendors/ – list vendors directory.
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/vendors/{id}/:
+    get:
+      operationId: v1_vendors_retrieve_2
+      description: GET /api/vendors/{pk}/ – view vendor profile.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/vendors/events/{event_id}/bookings/:
+    get:
+      operationId: v1_vendors_events_bookings_retrieve
+      description: GET /api/vendors/events/{event_id}/bookings/ and POST /api/vendors/events/{event_id}/bookings/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_vendors_events_bookings_create
+      description: GET /api/vendors/events/{event_id}/bookings/ and POST /api/vendors/events/{event_id}/bookings/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/vendors/events/{event_id}/bookings/{id}/:
+    get:
+      operationId: v1_vendors_events_bookings_retrieve_2
+      description: GET, PATCH, DELETE /api/vendors/events/{event_id}/bookings/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_vendors_events_bookings_partial_update
+      description: GET, PATCH, DELETE /api/vendors/events/{event_id}/bookings/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/vendors/events/{event_id}/bookings/{id}/cancel/:
+    post:
+      operationId: v1_vendors_events_bookings_cancel_create
+      description: POST /api/vendors/events/{event_id}/bookings/{pk}/cancel/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/vendors/events/{event_id}/quotes/:
+    get:
+      operationId: v1_vendors_events_quotes_retrieve
+      description: GET /api/vendors/events/{event_id}/quotes/ and POST /api/vendors/events/{event_id}/quotes/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_vendors_events_quotes_create
+      description: GET /api/vendors/events/{event_id}/quotes/ and POST /api/vendors/events/{event_id}/quotes/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/vendors/events/{event_id}/quotes/{id}/:
+    get:
+      operationId: v1_vendors_events_quotes_retrieve_2
+      description: GET, PATCH, DELETE /api/vendors/events/{event_id}/quotes/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_vendors_events_quotes_partial_update
+      description: GET, PATCH, DELETE /api/vendors/events/{event_id}/quotes/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/vendors/:
+    get:
+      operationId: vendors_retrieve
+      description: GET /api/vendors/ – list vendors directory.
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/vendors/{id}/:
+    get:
+      operationId: vendors_retrieve_2
+      description: GET /api/vendors/{pk}/ – view vendor profile.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/vendors/events/{event_id}/bookings/:
+    get:
+      operationId: vendors_events_bookings_retrieve
+      description: GET /api/vendors/events/{event_id}/bookings/ and POST /api/vendors/events/{event_id}/bookings/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: vendors_events_bookings_create
+      description: GET /api/vendors/events/{event_id}/bookings/ and POST /api/vendors/events/{event_id}/bookings/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/vendors/events/{event_id}/bookings/{id}/:
+    get:
+      operationId: vendors_events_bookings_retrieve_2
+      description: GET, PATCH, DELETE /api/vendors/events/{event_id}/bookings/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: vendors_events_bookings_partial_update
+      description: GET, PATCH, DELETE /api/vendors/events/{event_id}/bookings/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/vendors/events/{event_id}/bookings/{id}/cancel/:
+    post:
+      operationId: vendors_events_bookings_cancel_create
+      description: POST /api/vendors/events/{event_id}/bookings/{pk}/cancel/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/vendors/events/{event_id}/quotes/:
+    get:
+      operationId: vendors_events_quotes_retrieve
+      description: GET /api/vendors/events/{event_id}/quotes/ and POST /api/vendors/events/{event_id}/quotes/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: vendors_events_quotes_create
+      description: GET /api/vendors/events/{event_id}/quotes/ and POST /api/vendors/events/{event_id}/quotes/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/vendors/events/{event_id}/quotes/{id}/:
+    get:
+      operationId: vendors_events_quotes_retrieve_2
+      description: GET, PATCH, DELETE /api/vendors/events/{event_id}/quotes/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: vendors_events_quotes_partial_update
+      description: GET, PATCH, DELETE /api/vendors/events/{event_id}/quotes/{pk}/
+      parameters:
+      - in: path
+        name: event_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - vendors
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
