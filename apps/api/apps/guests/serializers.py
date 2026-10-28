@@ -18,6 +18,11 @@ class GuestSerializer(serializers.ModelSerializer):
     rsvp = RSVPSerializer(read_only=True)
     has_invite_token = serializers.SerializerMethodField()
     token_revoked = serializers.SerializerMethodField()
+    full_name = serializers.CharField(source="name", read_only=True)
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    plus_one_count = serializers.IntegerField(source="plus_ones", read_only=True)
+    rsvp_status = serializers.SerializerMethodField()
 
     class Meta:
         model = Guest
@@ -25,11 +30,16 @@ class GuestSerializer(serializers.ModelSerializer):
             "id",
             "event_id",
             "name",
+            "full_name",
+            "first_name",
+            "last_name",
             "email",
             "plus_ones",
+            "plus_one_count",
             "dietary_requirements",
             "accessibility_requirements",
             "rsvp",
+            "rsvp_status",
             "has_invite_token",
             "token_revoked",
             "created_at",
@@ -45,17 +55,54 @@ class GuestSerializer(serializers.ModelSerializer):
             return obj.invite_token.revoked
         return False
 
+    def get_first_name(self, obj: Guest) -> str:
+        parts = (obj.name or "").split(" ", 1)
+        return parts[0] if parts else ""
+
+    def get_last_name(self, obj: Guest) -> str:
+        parts = (obj.name or "").split(" ", 1)
+        return parts[1] if len(parts) > 1 else ""
+
+    def get_rsvp_status(self, obj: Guest) -> str:
+        if hasattr(obj, "rsvp") and obj.rsvp:
+            return obj.rsvp.response
+        return "pending"
+
 
 class GuestCreateUpdateSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=False, write_only=True, allow_blank=True)
+    last_name = serializers.CharField(required=False, write_only=True, allow_blank=True)
+    plus_one_count = serializers.IntegerField(required=False, write_only=True, min_value=0)
+    name = serializers.CharField(required=False)
+
     class Meta:
         model = Guest
         fields = (
             "name",
+            "first_name",
+            "last_name",
             "email",
             "plus_ones",
+            "plus_one_count",
             "dietary_requirements",
             "accessibility_requirements",
         )
+
+    def validate(self, attrs):
+        first_name = attrs.pop("first_name", "")
+        last_name = attrs.pop("last_name", "")
+        if first_name or last_name:
+            full = f"{first_name or ''} {last_name or ''}".strip()
+            if full:
+                attrs["name"] = full
+
+        if "plus_one_count" in attrs:
+            attrs["plus_ones"] = attrs.pop("plus_one_count")
+
+        if not attrs.get("name") and self.instance is None:
+            raise serializers.ValidationError({"name": "This field is required."})
+
+        return super().validate(attrs)
 
     def validate_plus_ones(self, value: int) -> int:
         if value < 0:

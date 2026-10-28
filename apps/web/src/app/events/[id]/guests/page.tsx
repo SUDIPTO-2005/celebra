@@ -102,11 +102,12 @@ export default function EventGuestsPage() {
 
   const openEditModal = (guest: Guest) => {
     setEditingGuest(guest);
-    setFormFirstName(guest.first_name);
-    setFormLastName(guest.last_name);
+    const nameParts = (guest.name || guest.full_name || '').split(' ');
+    setFormFirstName(guest.first_name || nameParts[0] || '');
+    setFormLastName(guest.last_name || nameParts.slice(1).join(' ') || '');
     setFormEmail(guest.email || '');
     setFormPhone(guest.phone || '');
-    setFormPlusOne(guest.plus_one_count || 0);
+    setFormPlusOne(guest.plus_one_count ?? guest.plus_ones ?? 0);
     setFormDietary(guest.dietary_requirements || '');
     setFormAccess(guest.accessibility_requirements || '');
     setIsAddOpen(true);
@@ -120,28 +121,24 @@ export default function EventGuestsPage() {
     }
 
     setSubmitting(true);
+    const payload = {
+      name: `${formFirstName.trim()} ${formLastName.trim()}`.trim(),
+      first_name: formFirstName.trim(),
+      last_name: formLastName.trim(),
+      email: formEmail.trim() || undefined,
+      phone: formPhone.trim() || undefined,
+      plus_ones: Number(formPlusOne) || 0,
+      plus_one_count: Number(formPlusOne) || 0,
+      dietary_requirements: formDietary.trim(),
+      accessibility_requirements: formAccess.trim(),
+    };
+
     try {
       if (editingGuest) {
-        await guestsApi.update(eventId, editingGuest.id, {
-          first_name: formFirstName,
-          last_name: formLastName,
-          email: formEmail,
-          phone: formPhone,
-          plus_one_count: Number(formPlusOne),
-          dietary_requirements: formDietary,
-          accessibility_requirements: formAccess,
-        });
+        await guestsApi.update(eventId, editingGuest.id, payload);
         success('Guest updated', `${formFirstName} ${formLastName} updated successfully.`);
       } else {
-        await guestsApi.create(eventId, {
-          first_name: formFirstName,
-          last_name: formLastName,
-          email: formEmail,
-          phone: formPhone,
-          plus_one_count: Number(formPlusOne),
-          dietary_requirements: formDietary,
-          accessibility_requirements: formAccess,
-        });
+        await guestsApi.create(eventId, payload);
         success('Guest added', `${formFirstName} added to guest list.`);
       }
       setIsAddOpen(false);
@@ -330,7 +327,7 @@ export default function EventGuestsPage() {
                   {guests.map((g) => (
                     <tr key={g.id} className="hover:bg-muted/30">
                       <td className="px-4 py-3 font-medium text-foreground">
-                        {g.full_name}
+                        {g.full_name || g.name || `${g.first_name || ''} ${g.last_name || ''}`.trim() || 'Guest'}
                       </td>
                       <td className="px-4 py-3 text-xs text-muted-foreground">
                         <div>{g.email || '—'}</div>
@@ -338,10 +335,10 @@ export default function EventGuestsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <Badge className={STATUS_COLORS[g.rsvp_status] || 'bg-gray-100 text-gray-700'}>
-                          {capitalize(g.rsvp_status)}
+                          {capitalize(g.rsvp_status || 'pending')}
                         </Badge>
                       </td>
-                      <td className="px-4 py-3 text-xs">{g.plus_one_count}</td>
+                      <td className="px-4 py-3 text-xs">{g.plus_one_count ?? g.plus_ones ?? 0}</td>
                       <td className="px-4 py-3 text-xs text-muted-foreground max-w-xs truncate">
                         {g.dietary_requirements || g.accessibility_requirements ? (
                           <span>
@@ -376,7 +373,7 @@ export default function EventGuestsPage() {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 text-destructive"
-                            onClick={() => handleDeleteGuest(g.id, g.full_name)}
+                            onClick={() => handleDeleteGuest(g.id, g.full_name || g.name || 'Guest')}
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </Button>

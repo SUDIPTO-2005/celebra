@@ -103,12 +103,14 @@ export type RsvpStatus = 'yes' | 'no' | 'maybe' | 'pending';
 export type Guest = {
   id: string;
   event: string;
+  name?: string;
   first_name: string;
   last_name: string;
   full_name: string;
   email: string;
   phone: string;
   rsvp_status: RsvpStatus;
+  plus_ones?: number;
   plus_one_count: number;
   dietary_requirements: string;
   accessibility_requirements: string;
@@ -119,10 +121,12 @@ export type Guest = {
 };
 
 export type GuestCreatePayload = {
+  name?: string;
   first_name: string;
   last_name: string;
   email?: string;
   phone?: string;
+  plus_ones?: number;
   plus_one_count?: number;
   dietary_requirements?: string;
   accessibility_requirements?: string;
