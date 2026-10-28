@@ -29,6 +29,17 @@ let csrfToken: string | null = null;
 
 async function getCsrfToken(): Promise<string> {
   if (csrfToken) return csrfToken;
+
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = sessionStorage.getItem('csrftoken');
+      if (stored) {
+        csrfToken = stored;
+        return csrfToken;
+      }
+    } catch {}
+  }
+
   // Try to get CSRF token from cookie first
   if (typeof document !== 'undefined') {
     const match = document.cookie.match(/csrftoken=([^;]+)/);
@@ -37,12 +48,24 @@ async function getCsrfToken(): Promise<string> {
       return csrfToken;
     }
   }
+
   // Fetch it from server
   try {
     const res = await fetch(`${API_BASE}/api/csrf/`, {
       credentials: 'include',
     });
     if (res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data && typeof data === 'object' && typeof (data as Record<string, unknown>).csrftoken === 'string') {
+        const receivedToken = (data as Record<string, unknown>).csrftoken as string;
+        csrfToken = receivedToken;
+        if (typeof window !== 'undefined') {
+          try {
+            sessionStorage.setItem('csrftoken', receivedToken);
+          } catch {}
+        }
+        return receivedToken;
+      }
       const match = res.headers.get('set-cookie')?.match(/csrftoken=([^;]+)/);
       if (match) csrfToken = match[1];
       // Also check cookie after fetch
@@ -104,6 +127,14 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   const contentType = response.headers.get('content-type') ?? '';
   if (contentType.includes('application/json')) {
     data = await response.json();
+    if (data && typeof data === 'object' && 'csrftoken' in data && typeof (data as Record<string, unknown>).csrftoken === 'string') {
+      csrfToken = (data as Record<string, unknown>).csrftoken as string;
+      if (typeof window !== 'undefined') {
+        try {
+          sessionStorage.setItem('csrftoken', csrfToken);
+        } catch {}
+      }
+    }
   } else {
     data = await response.text();
   }
@@ -112,6 +143,11 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     // Refresh CSRF on 403
     if (response.status === 403) {
       csrfToken = null;
+      if (typeof window !== 'undefined') {
+        try {
+          sessionStorage.removeItem('csrftoken');
+        } catch {}
+      }
     }
     throw new ApiError(response.status, response.statusText, data);
   }
