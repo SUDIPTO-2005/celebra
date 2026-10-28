@@ -20,7 +20,7 @@ import { FormField } from '@/components/ui/form-field';
 import { useToast } from '@/components/ui/use-toast';
 import { budgetApi } from '@/lib/api/endpoints';
 import { getErrorMessage } from '@/lib/api/client';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { extractResults, formatCurrency, formatDate } from '@/lib/utils';
 import type { BudgetCategory, Expense, BudgetSummary } from '@/lib/api/types';
 
 export default function EventBudgetPage() {
@@ -60,8 +60,8 @@ export default function EventBudgetPage() {
         budgetApi.listExpenses(eventId),
       ]);
       setSummary(sum);
-      setCategories(Array.isArray(cats) ? cats : (cats as any)?.results ?? []);
-      setExpenses(Array.isArray(exp) ? exp : (exp?.results ?? []));
+      setCategories(extractResults(cats));
+      setExpenses(extractResults(exp));
     } catch (err) {
       toastError('Budget data failed to load', getErrorMessage(err));
     } finally {

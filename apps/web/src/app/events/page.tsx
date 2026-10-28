@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
 import { eventsApi } from '@/lib/api/endpoints';
 import { getErrorMessage } from '@/lib/api/client';
-import { formatDate, formatCurrency, capitalize, STATUS_COLORS } from '@/lib/utils';
+import { extractResults, formatDate, formatCurrency, capitalize, STATUS_COLORS } from '@/lib/utils';
 import type { Event, EventStatus } from '@/lib/api/types';
 
 type FilterTab = 'all' | 'upcoming' | 'past' | 'cancelled';
@@ -31,7 +31,7 @@ export default function EventsPage() {
     setError('');
     try {
       const res = await eventsApi.list(`page=${page}&ordering=-start_date`);
-      const list = Array.isArray(res) ? res : (res?.results ?? []);
+      const list = extractResults(res);
       setEvents(list);
       setTotalCount(res?.count ?? list.length);
     } catch (err) {
@@ -49,10 +49,12 @@ export default function EventsPage() {
   const filteredEvents = useMemo(() => {
     if (!Array.isArray(events)) return [];
     const today = new Date().toISOString().split('T')[0];
+    const term = searchTerm.toLowerCase().trim();
     return events.filter((ev) => {
       const matchesSearch =
-        ev.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ev.venue?.toLowerCase().includes(searchTerm.toLowerCase());
+        !term ||
+        ev.name.toLowerCase().includes(term) ||
+        Boolean(ev.venue?.toLowerCase().includes(term));
 
       if (!matchesSearch) return false;
 

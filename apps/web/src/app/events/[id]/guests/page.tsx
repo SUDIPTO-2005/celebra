@@ -29,9 +29,10 @@ import {
 } from '@/components/ui/dialog';
 import { FormField } from '@/components/ui/form-field';
 import { useToast } from '@/components/ui/use-toast';
+import { useDebounce } from '@/lib/use-debounce';
 import { guestsApi } from '@/lib/api/endpoints';
 import { getErrorMessage } from '@/lib/api/client';
-import { STATUS_COLORS, capitalize } from '@/lib/utils';
+import { extractResults, STATUS_COLORS, capitalize } from '@/lib/utils';
 import type { Guest, GuestSummary, InviteToken } from '@/lib/api/types';
 
 export default function EventGuestsPage() {
@@ -44,6 +45,7 @@ export default function EventGuestsPage() {
   const [summary, setSummary] = useState<GuestSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 300);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
@@ -66,10 +68,10 @@ export default function EventGuestsPage() {
   const loadData = useCallback(async () => {
     try {
       const [gRes, sRes] = await Promise.all([
-        guestsApi.list(eventId, `page=${page}&search=${encodeURIComponent(searchTerm)}`),
+        guestsApi.list(eventId, `page=${page}&search=${encodeURIComponent(debouncedSearch)}`),
         guestsApi.summary(eventId),
       ]);
-      const guestList = Array.isArray(gRes) ? gRes : (gRes?.results ?? []);
+      const guestList = extractResults(gRes);
       setGuests(guestList);
       setTotalCount(gRes?.count ?? guestList.length);
       setSummary(sRes);
@@ -78,11 +80,11 @@ export default function EventGuestsPage() {
     } finally {
       setLoading(false);
     }
-  }, [eventId, page, searchTerm, toastError]);
+  }, [eventId, page, debouncedSearch, toastError]);
 
   useEffect(() => {
     if (eventId) loadData();
-  }, [eventId, page, searchTerm, loadData]);
+  }, [eventId, loadData]);
 
   const resetForm = () => {
     setFormFirstName('');

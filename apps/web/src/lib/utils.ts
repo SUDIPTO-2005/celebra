@@ -70,3 +70,18 @@ export const STATUS_COLORS: Record<string, string> = {
   pending_booking: 'bg-yellow-100 text-yellow-700',
   confirmed_booking: 'bg-green-100 text-green-700',
 };
+
+/**
+ * Type-safe helper to safely unpack paginated or unpaginated API responses.
+ * Avoids unsafe `any` casting across client components.
+ */
+export function extractResults<T>(
+  response: T[] | { results?: T[] } | null | undefined
+): T[] {
+  if (!response) return [];
+  if (Array.isArray(response)) return response;
+  if ('results' in response && Array.isArray(response.results)) {
+    return response.results;
+  }
+  return [];
+}

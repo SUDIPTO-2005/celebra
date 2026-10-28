@@ -55,6 +55,9 @@ class Vendor(TimestampedModel):
 
     class Meta:
         ordering = ["category", "name"]
+        indexes = [
+            models.Index(fields=["category", "name"], name="idx_vendor_cat_name"),
+        ]
 
     def __str__(self) -> str:
         tag = " [Sample]" if self.is_sample_data else ""
@@ -82,6 +85,10 @@ class QuoteRequest(TimestampedModel):
                 condition=models.Q(quoted_amount__isnull=True) | models.Q(quoted_amount__gte=0),
                 name="quote_amount_non_negative",
             )
+        ]
+        indexes = [
+            models.Index(fields=["event", "status"], name="idx_quote_event_status"),
+            models.Index(fields=["vendor", "status"], name="idx_quote_vendor_status"),
         ]
 
     def __str__(self) -> str:
@@ -113,6 +120,10 @@ class Booking(TimestampedModel):
                 condition=models.Q(amount__gte=0),
                 name="booking_amount_non_negative",
             ),
+        ]
+        indexes = [
+            models.Index(fields=["vendor", "status", "start_time", "end_time"], name="idx_book_v_stat_time"),
+            models.Index(fields=["event", "status"], name="idx_book_event_status"),
         ]
 
     def __str__(self) -> str:

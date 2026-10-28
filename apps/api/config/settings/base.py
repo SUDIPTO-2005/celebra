@@ -129,11 +129,26 @@ else:
             "PASSWORD": os.getenv("POSTGRES_PASSWORD", "celebra"),
             "HOST": os.getenv("POSTGRES_HOST", "localhost"),
             "PORT": os.getenv("POSTGRES_PORT", "5432"),
+            "CONN_MAX_AGE": int(os.getenv("DATABASE_CONN_MAX_AGE", "600")),
             "OPTIONS": {
                 "connect_timeout": 5,
             },
         }
     }
+
+# ──────────────────────────────────────────────
+# Caching
+# ──────────────────────────────────────────────
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "celebra-default-cache",
+        "TIMEOUT": 300,
+        "OPTIONS": {
+            "MAX_ENTRIES": 1000,
+        },
+    }
+}
 
 # ──────────────────────────────────────────────
 # Password validation

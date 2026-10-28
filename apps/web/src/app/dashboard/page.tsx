@@ -25,7 +25,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/lib/auth-context';
 import { eventsApi, notificationsApi } from '@/lib/api/endpoints';
 import { getErrorMessage } from '@/lib/api/client';
-import { formatDate, formatCurrency, capitalize, STATUS_COLORS } from '@/lib/utils';
+import { extractResults, formatDate, formatCurrency, capitalize, STATUS_COLORS } from '@/lib/utils';
 import type { Event, Notification } from '@/lib/api/types';
 
 export default function PremiumDashboardPage() {
@@ -48,10 +48,10 @@ export default function PremiumDashboardPage() {
           notificationsApi.unreadCount(),
         ]);
 
-        const eventList = Array.isArray(eventsRes) ? eventsRes : (eventsRes?.results ?? []);
+        const eventList = extractResults(eventsRes);
         setEvents(eventList);
 
-        const notifList = Array.isArray(notifRes) ? notifRes : (notifRes?.results ?? []);
+        const notifList = extractResults(notifRes);
         setNotifications(notifList);
 
         setUnreadCount(countRes?.count ?? 0);

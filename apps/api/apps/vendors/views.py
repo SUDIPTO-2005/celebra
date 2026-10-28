@@ -2,6 +2,7 @@
 Vendors app – API views.
 """
 
+from django.core.cache import cache
 from rest_framework import status
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
@@ -24,15 +25,23 @@ from .services import VendorService
 
 
 class VendorListView(APIView):
-    """GET /api/vendors/ – list vendors directory."""
+    """GET /api/vendors/ – list vendors directory with in-memory caching."""
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
         category = request.query_params.get("category")
         search = request.query_params.get("search")
+
+        cache_key = f"vendors_dir_{category or 'all'}_{search or 'all'}"
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            return Response(cached_data)
+
         vendors = VendorService.list_vendors(category=category, search=search)
-        return Response(VendorSerializer(vendors, many=True).data)
+        data = VendorSerializer(vendors, many=True).data
+        cache.set(cache_key, data, timeout=60)
+        return Response(data)
 
 
 class VendorDetailView(APIView):

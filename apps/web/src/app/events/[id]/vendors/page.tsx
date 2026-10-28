@@ -21,7 +21,7 @@ import { FormField } from '@/components/ui/form-field';
 import { useToast } from '@/components/ui/use-toast';
 import { vendorsApi } from '@/lib/api/endpoints';
 import { getErrorMessage } from '@/lib/api/client';
-import { formatCurrency, formatDateTime, formatDate, STATUS_COLORS, capitalize } from '@/lib/utils';
+import { extractResults, formatCurrency, formatDateTime, formatDate, STATUS_COLORS, capitalize } from '@/lib/utils';
 import type { Vendor, QuoteRequest, Booking } from '@/lib/api/types';
 
 export default function EventVendorsPage() {
@@ -58,9 +58,9 @@ export default function EventVendorsPage() {
         vendorsApi.listBookings(eventId),
         vendorsApi.list('page_size=50'),
       ]);
-      setQuotes(Array.isArray(qRes) ? qRes : (qRes as any)?.results ?? []);
-      setBookings(Array.isArray(bRes) ? bRes : (bRes as any)?.results ?? []);
-      setVendors(Array.isArray(vRes) ? vRes : (vRes as any)?.results ?? []);
+      setQuotes(extractResults(qRes));
+      setBookings(extractResults(bRes));
+      setVendors(extractResults(vRes));
     } catch (err) {
       toastError('Vendor data failed to load', getErrorMessage(err));
     } finally {
