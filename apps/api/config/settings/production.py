@@ -50,6 +50,13 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https:\/\/.*\.vercel\.app$",
 ]
 
+# Ensure Vercel domains are trusted for CSRF and CORS
+for default_vercel_origin in ["https://*.vercel.app", "https://celebra-eight.vercel.app"]:
+    if default_vercel_origin not in CSRF_TRUSTED_ORIGINS:  # noqa: F405
+        CSRF_TRUSTED_ORIGINS.append(default_vercel_origin)  # noqa: F405
+    if default_vercel_origin not in CORS_ALLOWED_ORIGINS:  # noqa: F405
+        CORS_ALLOWED_ORIGINS.append(default_vercel_origin)  # noqa: F405
+
 # Ensure Render host is in CSRF trusted origins
 if render_host:
     render_origin = f"https://{render_host}"
