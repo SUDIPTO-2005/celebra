@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: celebra-api
+    runtime: python
+    rootDir: apps/api
+    buildCommand: ./build.sh
+    startCommand: gunicorn config.wsgi:application
+    healthCheckPath: /api/health/
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: celebra-db
+          property: connectionString
+      - key: SECURE_SSL_REDIRECT
+        value: "True"
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: SESSION_COOKIE_SAMESITE
+        value: None
+      - key: CSRF_COOKIE_SAMESITE
+        value: None
+
+databases:
+  - name: celebra-db
+    databaseName: celebra
+    user: celebra
+    plan: free

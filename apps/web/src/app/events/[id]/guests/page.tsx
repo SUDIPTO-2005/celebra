@@ -279,7 +279,7 @@ export default function EventGuestsPage() {
             Import CSV
           </Button>
 
-          <Button variant="outline" size="sm" onClick={handleCreateInviteLink}>
+          <Button variant="outline" size="sm" onClick={() => handleCreateInviteLink()}>
             <LinkIcon className="h-4 w-4 mr-1.5" />
             Invite Link
           </Button>

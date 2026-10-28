@@ -14,22 +14,69 @@ DEBUG = False
 if not SECRET_KEY:  # noqa: F405
     raise ValueError("DJANGO_SECRET_KEY must be set in production.")
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
+# Parse ALLOWED_HOSTS from env, plus automatic Render hostname support
+_raw_hosts = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = [h.strip() for h in _raw_hosts if h.strip()]
+
+render_host = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if render_host and render_host not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(render_host)
+
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = [".onrender.com", "localhost", "127.0.0.1"]
 
 # ──────────────────────────────────────────────
-# CORS – strict in production
+# Reverse Proxy & SSL (Crucial for Render load balancer)
 # ──────────────────────────────────────────────
-CORS_ALLOW_ALL_ORIGINS = False
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "True").lower() in (
+    "true",
+    "1",
+    "yes",
+)
 
 # ──────────────────────────────────────────────
-# Secure cookies
+# CORS & CSRF (Configured for cross-origin Vercel frontend)
+# ──────────────────────────────────────────────
+CORS_ALLOW_ALL_ORIGINS = os.getenv("CORS_ALLOW_ALL_ORIGINS", "False").lower() in (
+    "true",
+    "1",
+    "yes",
+)
+CORS_ALLOW_CREDENTIALS = True
+
+# Allow all Vercel deployment preview URLs by regex
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.vercel\.app$",
+]
+
+# Ensure Render host is in CSRF trusted origins
+if render_host:
+    render_origin = f"https://{render_host}"
+    if render_origin not in CSRF_TRUSTED_ORIGINS:  # noqa: F405
+        CSRF_TRUSTED_ORIGINS.append(render_origin)  # noqa: F405
+
+# ──────────────────────────────────────────────
+# Secure cookies (SameSite=None required for cross-domain Vercel <-> Render)
 # ──────────────────────────────────────────────
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_HTTPONLY = False  # False so frontend can read CSRF token
+SESSION_COOKIE_SAMESITE = os.getenv("SESSION_COOKIE_SAMESITE", "None")
+CSRF_COOKIE_SAMESITE = os.getenv("CSRF_COOKIE_SAMESITE", "None")
+
+# ──────────────────────────────────────────────
+# Static files (WhiteNoise)
+# ──────────────────────────────────────────────
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 # ──────────────────────────────────────────────
 # HSTS

@@ -77,6 +77,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CELEBRA_APPS
 # ──────────────────────────────────────────────
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -103,6 +104,22 @@ if USE_SQLITE:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+elif os.getenv("DATABASE_URL"):
+    try:
+        import dj_database_url
+        DATABASES = {
+            "default": dj_database_url.config(
+                default=os.getenv("DATABASE_URL"),
+                conn_max_age=600,
+            )
+        }
+    except ImportError:
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": BASE_DIR / "db.sqlite3",
+            }
+        }
 else:
     DATABASES = {
         "default": {

@@ -5,7 +5,9 @@ Celebra – root URL configuration with API versioning and database-aware health
 from django.contrib import admin
 from django.db import connection
 from django.http import JsonResponse
+from django.middleware.csrf import get_token
 from django.urls import include, path
+from django.views.decorators.csrf import ensure_csrf_cookie
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
@@ -34,12 +36,20 @@ def health_check(request):
     )
 
 
+@ensure_csrf_cookie
+def csrf_token_view(request):
+    """Ensure CSRF cookie is set on client and return the token in JSON."""
+    return JsonResponse({"csrftoken": get_token(request)})
+
+
 urlpatterns = [
     # ── Admin ──────────────────────────────────
     path("admin/", admin.site.urls),
     # ── Health / docs ──────────────────────────
     path("api/health/", health_check, name="health-check"),
     path("api/v1/health/", health_check, name="health-check-v1"),
+    path("api/csrf/", csrf_token_view, name="csrf-token"),
+    path("api/v1/csrf/", csrf_token_view, name="csrf-token-v1"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema-v1"),
     path(
