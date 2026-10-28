@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Shield, UserPlus, Trash2, Mail } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -37,7 +37,7 @@ export default function EventTeamPage() {
   const [role, setRole] = useState<'cohost'>('cohost');
   const [submitting, setSubmitting] = useState(false);
 
-  const loadMembers = async () => {
+  const loadMembers = useCallback(async () => {
     try {
       const data = await eventsApi.members(eventId);
       setMembers(data);
@@ -46,11 +46,11 @@ export default function EventTeamPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId, toastError]);
 
   useEffect(() => {
     if (eventId) loadMembers();
-  }, [eventId]);
+  }, [eventId, loadMembers]);
 
   const handleAddMember = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -54,6 +54,10 @@ class Task(TimestampedModel):
 
     class Meta:
         ordering = ["due_date", "-priority", "created_at"]
+        indexes = [
+            models.Index(fields=["event", "status"], name="idx_task_event_status"),
+            models.Index(fields=["event", "due_date"], name="idx_task_event_duedate"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.title} [{self.status}]"
@@ -71,6 +75,9 @@ class ScheduleItem(TimestampedModel):
 
     class Meta:
         ordering = ["start_time"]
+        indexes = [
+            models.Index(fields=["event", "start_time"], name="idx_sched_event_start"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.title} ({self.start_time} - {self.end_time})"

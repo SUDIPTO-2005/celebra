@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { PlusCircle, CheckCircle2, Circle, Clock, Trash2, Edit2, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -45,7 +45,7 @@ export default function EventTasksPage() {
   const [taskStatus, setTaskStatus] = useState<TaskStatus>('todo');
   const [taskDue, setTaskDue] = useState('');
 
-  const loadTasks = async () => {
+  const loadTasks = useCallback(async () => {
     try {
       const res = await tasksApi.list(eventId, 'ordering=due_date');
       const list = Array.isArray(res) ? res : (res?.results ?? []);
@@ -56,11 +56,11 @@ export default function EventTasksPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId, toastError]);
 
   useEffect(() => {
     if (eventId) loadTasks();
-  }, [eventId]);
+  }, [eventId, loadTasks]);
 
   const openAddTask = () => {
     setEditingTask(null);

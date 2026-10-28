@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -33,7 +33,7 @@ export default function EventOverviewPage() {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
 
-  const fetchEvent = async () => {
+  const fetchEvent = useCallback(async () => {
     try {
       const data = await eventsApi.get(eventId);
       setEvent(data);
@@ -42,11 +42,11 @@ export default function EventOverviewPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId, toastError]);
 
   useEffect(() => {
     if (eventId) fetchEvent();
-  }, [eventId]);
+  }, [eventId, fetchEvent]);
 
   const handleTransition = async (nextStatus: string) => {
     setActionLoading(true);

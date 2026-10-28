@@ -2,8 +2,11 @@
 Events app – API views.
 """
 
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
-from django.db.models import Q
+from django.db.models import Count, DecimalField, IntegerField, OuterRef, Q, Subquery, Sum, Value
+from django.db.models.functions import Coalesce
 from rest_framework import status
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
@@ -11,7 +14,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.budget.models import Expense
 from apps.core.pagination import StandardPagination
+from apps.guests.models import Guest, RSVPResponse
+from apps.tasks.models import Task, TaskStatus
 
 from .models import Event
 from .serializers import (
@@ -34,6 +40,8 @@ def get_user_event(event_id: str, user) -> Event:
         return (
             Event.objects.filter(Q(owner=user) | Q(memberships__user=user))
             .distinct()
+            .select_related("owner")
+            .prefetch_related("memberships__user")
             .get(id=event_id)
         )
     except (Event.DoesNotExist, ValueError):
@@ -47,12 +55,76 @@ class EventListCreateView(APIView):
     pagination_class = StandardPagination
 
     def get(self, request: Request) -> Response:
+        ordering = request.query_params.get("ordering", "-start_date")
+        valid_orderings = {
+            "start_date": "start_date",
+            "-start_date": "-start_date",
+            "date": "start_date",
+            "-date": "-start_date",
+            "created_at": "created_at",
+            "-created_at": "-created_at",
+            "name": "name",
+            "-name": "-name",
+        }
+        order_field = valid_orderings.get(ordering, "-start_date")
+
+        guests_sub = Subquery(
+            Guest.objects.filter(event_id=OuterRef("id"))
+            .values("event_id")
+            .annotate(c=Count("id"))
+            .values("c")[:1],
+            output_field=IntegerField(),
+        )
+        attending_sub = Subquery(
+            Guest.objects.filter(event_id=OuterRef("id"), rsvp__response=RSVPResponse.YES)
+            .values("event_id")
+            .annotate(c=Count("id"))
+            .values("c")[:1],
+            output_field=IntegerField(),
+        )
+        pending_sub = Subquery(
+            Guest.objects.filter(event_id=OuterRef("id"), rsvp__isnull=True)
+            .values("event_id")
+            .annotate(c=Count("id"))
+            .values("c")[:1],
+            output_field=IntegerField(),
+        )
+        tasks_sub = Subquery(
+            Task.objects.filter(event_id=OuterRef("id"))
+            .values("event_id")
+            .annotate(c=Count("id"))
+            .values("c")[:1],
+            output_field=IntegerField(),
+        )
+        completed_tasks_sub = Subquery(
+            Task.objects.filter(event_id=OuterRef("id"), status=TaskStatus.COMPLETED)
+            .values("event_id")
+            .annotate(c=Count("id"))
+            .values("c")[:1],
+            output_field=IntegerField(),
+        )
+        actual_spent_sub = Subquery(
+            Expense.objects.filter(category__event_id=OuterRef("id"))
+            .values("category__event_id")
+            .annotate(total=Sum("amount"))
+            .values("total")[:1],
+            output_field=DecimalField(max_digits=12, decimal_places=2),
+        )
+
         events = (
             Event.objects.filter(Q(owner=request.user) | Q(memberships__user=request.user))
             .distinct()
             .select_related("owner")
             .prefetch_related("memberships__user")
-            .order_by("-start_date", "-created_at")
+            .annotate(
+                annotated_guests_count=Coalesce(guests_sub, Value(0)),
+                annotated_attending_count=Coalesce(attending_sub, Value(0)),
+                annotated_pending_rsvp_count=Coalesce(pending_sub, Value(0)),
+                annotated_tasks_count=Coalesce(tasks_sub, Value(0)),
+                annotated_completed_tasks_count=Coalesce(completed_tasks_sub, Value(0)),
+                annotated_actual_spent=Coalesce(actual_spent_sub, Value(Decimal("0.00"))),
+            )
+            .order_by(order_field, "-created_at")
         )
 
         status_param = request.query_params.get("status")

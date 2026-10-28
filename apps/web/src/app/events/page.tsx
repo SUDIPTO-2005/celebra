@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { PlusCircle, Search, Calendar, Users, DollarSign } from 'lucide-react';
 import { AppLayout } from '@/components/layout/app-layout';
@@ -26,7 +26,7 @@ export default function EventsPage() {
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -40,11 +40,11 @@ export default function EventsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page]);
 
   useEffect(() => {
     fetchEvents();
-  }, [page]);
+  }, [fetchEvents]);
 
   const filteredEvents = useMemo(() => {
     if (!Array.isArray(events)) return [];

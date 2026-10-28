@@ -78,37 +78,57 @@ class EventSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         if not request or not request.user.is_authenticated:
             return ""
-        if obj.owner == request.user:
+        if obj.owner_id == request.user.id or getattr(obj, "owner", None) == request.user:
             return "owner"
+        # Check prefetch cache if available to eliminate N+1 queries
+        if hasattr(obj, "_prefetched_objects_cache") and "memberships" in obj._prefetched_objects_cache:
+            for m in obj.memberships.all():
+                if m.user_id == request.user.id:
+                    return m.role
+            return ""
         membership = obj.memberships.filter(user=request.user).first()
         return membership.role if membership else ""
 
     def get_guests_count(self, obj: Event) -> int:
+        if hasattr(obj, "annotated_guests_count"):
+            return obj.annotated_guests_count
         return getattr(obj, "guests_count_val", obj.guests.count() if hasattr(obj, "guests") else 0)
 
     def get_attending_count(self, obj: Event) -> int:
+        if hasattr(obj, "annotated_attending_count"):
+            return obj.annotated_attending_count
         if hasattr(obj, "guests"):
             return obj.guests.filter(rsvp__response="yes").count()
         return 0
 
     def get_pending_rsvp_count(self, obj: Event) -> int:
+        if hasattr(obj, "annotated_pending_rsvp_count"):
+            return obj.annotated_pending_rsvp_count
         if hasattr(obj, "guests"):
             return obj.guests.filter(rsvp__isnull=True).count()
         return 0
 
     def get_tasks_count(self, obj: Event) -> int:
+        if hasattr(obj, "annotated_tasks_count"):
+            return obj.annotated_tasks_count
         return obj.tasks.count() if hasattr(obj, "tasks") else 0
 
     def get_completed_tasks_count(self, obj: Event) -> int:
+        if hasattr(obj, "annotated_completed_tasks_count"):
+            return obj.annotated_completed_tasks_count
         return obj.tasks.filter(status="completed").count() if hasattr(obj, "tasks") else 0
 
     def get_actual_spent(self, obj: Event) -> str:
+        if hasattr(obj, "annotated_actual_spent") and obj.annotated_actual_spent is not None:
+            return f"{Decimal(str(obj.annotated_actual_spent)):.2f}"
         if hasattr(obj, "budget_categories"):
-            total = sum(
-                (exp.amount for cat in obj.budget_categories.all() for exp in cat.expenses.all()),
-                Decimal("0.00"),
-            )
-            return str(total)
+            from django.db.models import Sum
+
+            from apps.budget.models import Expense
+            res = Expense.objects.filter(category__event=obj).aggregate(total=Sum("amount"))
+            total = res.get("total")
+            if total is not None:
+                return f"{Decimal(str(total)):.2f}"
         return "0.00"
 
 

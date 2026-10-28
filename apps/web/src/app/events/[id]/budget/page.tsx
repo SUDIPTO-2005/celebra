@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { PlusCircle, DollarSign, Tag, Trash2, Edit2, TrendingDown, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -52,7 +52,7 @@ export default function EventBudgetPage() {
   const [expPaid, setExpPaid] = useState(false);
   const [expDueDate, setExpDueDate] = useState('');
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [sum, cats, exp] = await Promise.all([
         budgetApi.summary(eventId),
@@ -67,11 +67,11 @@ export default function EventBudgetPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId, toastError]);
 
   useEffect(() => {
     if (eventId) loadData();
-  }, [eventId]);
+  }, [eventId, loadData]);
 
   const handleCreateCategory = async (e: React.FormEvent) => {
     e.preventDefault();

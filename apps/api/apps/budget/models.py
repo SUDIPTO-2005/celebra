@@ -53,6 +53,9 @@ class Expense(TimestampedModel):
                 name="expense_amount_non_negative",
             )
         ]
+        indexes = [
+            models.Index(fields=["category", "-date"], name="idx_expense_cat_date"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.description}: {self.amount} {self.currency}"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import {
   UserPlus,
@@ -63,7 +63,7 @@ export default function EventGuestsPage() {
   const [formDietary, setFormDietary] = useState('');
   const [formAccess, setFormAccess] = useState('');
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [gRes, sRes] = await Promise.all([
         guestsApi.list(eventId, `page=${page}&search=${encodeURIComponent(searchTerm)}`),
@@ -78,11 +78,11 @@ export default function EventGuestsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId, page, searchTerm, toastError]);
 
   useEffect(() => {
     if (eventId) loadData();
-  }, [eventId, page, searchTerm]);
+  }, [eventId, page, searchTerm, loadData]);
 
   const resetForm = () => {
     setFormFirstName('');

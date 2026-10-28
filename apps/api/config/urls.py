@@ -64,7 +64,7 @@ urlpatterns = [
     ),
     # ── API (Standard) ─────────────────────────
     path("api/auth/", include("apps.accounts.urls")),
-    path("api/accounts/", include("apps.accounts.urls")),
+    path("api/accounts/", include(("apps.accounts.urls", "accounts"), namespace="accounts-alias")),
     path("api/events/", include("apps.events.urls")),
     path("api/guests/", include("apps.guests.urls")),
     path("api/budget/", include("apps.budget.urls")),
@@ -72,14 +72,14 @@ urlpatterns = [
     path("api/vendors/", include("apps.vendors.urls")),
     path("api/ai/", include("apps.ai.urls")),
     path("api/notifications/", include("apps.notifications.urls")),
-    # ── API v1 ─────────────────────────────────
-    path("api/v1/auth/", include("apps.accounts.urls")),
-    path("api/v1/accounts/", include("apps.accounts.urls")),
-    path("api/v1/events/", include("apps.events.urls")),
-    path("api/v1/guests/", include("apps.guests.urls")),
-    path("api/v1/budget/", include("apps.budget.urls")),
-    path("api/v1/tasks/", include("apps.tasks.urls")),
-    path("api/v1/vendors/", include("apps.vendors.urls")),
-    path("api/v1/ai/", include("apps.ai.urls")),
-    path("api/v1/notifications/", include("apps.notifications.urls")),
+    # ── API v1 (Versioned) ─────────────────────
+    path("api/v1/auth/", include(("apps.accounts.urls", "accounts"), namespace="v1-auth")),
+    path("api/v1/accounts/", include(("apps.accounts.urls", "accounts"), namespace="v1-accounts")),
+    path("api/v1/events/", include(("apps.events.urls", "events"), namespace="v1-events")),
+    path("api/v1/guests/", include(("apps.guests.urls", "guests"), namespace="v1-guests")),
+    path("api/v1/budget/", include(("apps.budget.urls", "budget"), namespace="v1-budget")),
+    path("api/v1/tasks/", include(("apps.tasks.urls", "tasks"), namespace="v1-tasks")),
+    path("api/v1/vendors/", include(("apps.vendors.urls", "vendors"), namespace="v1-vendors")),
+    path("api/v1/ai/", include(("apps.ai.urls", "ai"), namespace="v1-ai")),
+    path("api/v1/notifications/", include(("apps.notifications.urls", "notifications"), namespace="v1-notifications")),
 ]

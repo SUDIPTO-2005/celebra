@@ -157,9 +157,10 @@ class ScheduleService:
                 item_a = items[i]
                 item_b = items[j]
 
-                # If item_b starts after or when item_a ends, no overlap with subsequent items
+                # Since items are ordered by start_time, if item_b starts at or after
+                # item_a ends, no subsequent item can overlap with item_a either.
                 if item_b.start_time >= item_a.end_time:
-                    continue
+                    break
 
                 if item_a.start_time < item_b.end_time and item_b.start_time < item_a.end_time:
                     conflicts.append(

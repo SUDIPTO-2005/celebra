@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Store, PlusCircle, Calendar, FileText, CheckCircle2, XCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -51,7 +51,7 @@ export default function EventVendorsPage() {
   const [bookNotes, setBookNotes] = useState('');
   const [bookSubmitting, setBookSubmitting] = useState(false);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [qRes, bRes, vRes] = await Promise.all([
         vendorsApi.listQuotes(eventId),
@@ -66,11 +66,11 @@ export default function EventVendorsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId, toastError]);
 
   useEffect(() => {
     if (eventId) loadData();
-  }, [eventId]);
+  }, [eventId, loadData]);
 
   const handleRequestQuote = async (e: React.FormEvent) => {
     e.preventDefault();

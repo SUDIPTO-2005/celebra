@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { PlusCircle, Clock, MapPin, Trash2, Edit2, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -44,7 +44,7 @@ export default function EventTimelinePage() {
   const [loc, setLoc] = useState('');
   const [notes, setNotes] = useState('');
 
-  const loadSchedule = async () => {
+  const loadSchedule = useCallback(async () => {
     try {
       const data = await tasksApi.listSchedule(eventId);
       setItems(data);
@@ -53,11 +53,11 @@ export default function EventTimelinePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [eventId, toastError]);
 
   useEffect(() => {
     if (eventId) loadSchedule();
-  }, [eventId]);
+  }, [eventId, loadSchedule]);
 
   const openAdd = () => {
     setEditingItem(null);

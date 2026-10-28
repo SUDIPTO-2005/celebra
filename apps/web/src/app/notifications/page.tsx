@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Bell,
   CheckCheck,
@@ -31,7 +31,7 @@ export default function NotificationsPage() {
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [actionLoading, setActionLoading] = useState(false);
 
-  const loadNotifications = async () => {
+  const loadNotifications = useCallback(async () => {
     try {
       const res = await notificationsApi.list(filter === 'unread' ? 'unread=true' : '');
       const list = Array.isArray(res) ? res : (res?.results ?? []);
@@ -41,11 +41,11 @@ export default function NotificationsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter, toastError]);
 
   useEffect(() => {
     loadNotifications();
-  }, [filter]);
+  }, [loadNotifications]);
 
   const handleMarkRead = async (id: string) => {
     try {

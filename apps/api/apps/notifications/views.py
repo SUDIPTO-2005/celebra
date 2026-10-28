@@ -20,7 +20,7 @@ class NotificationListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        qs = Notification.objects.filter(user=request.user)
+        qs = Notification.objects.filter(user=request.user).select_related("event")
         unread_only = request.query_params.get("unread")
         if unread_only and unread_only.lower() in ("true", "1"):
             qs = qs.filter(is_read=False)

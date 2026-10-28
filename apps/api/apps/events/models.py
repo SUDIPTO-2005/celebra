@@ -63,6 +63,10 @@ class Event(TimestampedModel):
                 name="event_budget_non_negative",
             ),
         ]
+        indexes = [
+            models.Index(fields=["owner", "-start_date"], name="idx_event_owner_start"),
+            models.Index(fields=["status", "-start_date"], name="idx_event_status_start"),
+        ]
 
     def __str__(self) -> str:
         return self.name

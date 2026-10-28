@@ -44,6 +44,10 @@ class Notification(TimestampedModel):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "is_read"], name="idx_notif_user_read"),
+            models.Index(fields=["user", "-created_at"], name="idx_notif_user_created"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.user.email} - {self.title} [Read: {self.is_read}]"

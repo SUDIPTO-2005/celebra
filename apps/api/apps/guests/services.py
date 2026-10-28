@@ -14,6 +14,7 @@ from typing import Any
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.db.models import Count, Q, Sum
 from django.utils import timezone
 
 from apps.events.models import Event
@@ -262,34 +263,25 @@ class GuestService:
 
     @staticmethod
     def get_rsvp_summary(event: Event, user: Any) -> dict[str, Any]:
-        """Return RSVP aggregate breakdown for an event."""
+        """Return RSVP aggregate breakdown for an event using database aggregation."""
         EventService.check_member_permission(event, user)
-        guests = event.guests.select_related("rsvp").all()
-        total = guests.count()
-
-        attending = 0
-        declined = 0
-        maybe = 0
-        pending = 0
-        attending_plus_ones = 0
-
-        for g in guests:
-            if not hasattr(g, "rsvp") or g.rsvp is None:
-                pending += 1
-            elif g.rsvp.response == RSVPResponse.YES:
-                attending += 1
-                attending_plus_ones += g.plus_ones
-            elif g.rsvp.response == RSVPResponse.NO:
-                declined += 1
-            elif g.rsvp.response == RSVPResponse.MAYBE:
-                maybe += 1
+        aggregates = event.guests.aggregate(
+            total=Count("id"),
+            pending=Count("id", filter=Q(rsvp__isnull=True)),
+            attending=Count("id", filter=Q(rsvp__response=RSVPResponse.YES)),
+            declined=Count("id", filter=Q(rsvp__response=RSVPResponse.NO)),
+            maybe=Count("id", filter=Q(rsvp__response=RSVPResponse.MAYBE)),
+            attending_plus_ones=Sum("plus_ones", filter=Q(rsvp__response=RSVPResponse.YES)),
+        )
+        attending = aggregates["attending"] or 0
+        attending_plus_ones = aggregates["attending_plus_ones"] or 0
 
         return {
-            "total_guests": total,
+            "total_guests": aggregates["total"] or 0,
             "attending": attending,
-            "declined": declined,
-            "maybe": maybe,
-            "pending": pending,
+            "declined": aggregates["declined"] or 0,
+            "maybe": aggregates["maybe"] or 0,
+            "pending": aggregates["pending"] or 0,
             "attending_plus_ones": attending_plus_ones,
             "total_headcount": attending + attending_plus_ones,
         }

@@ -27,6 +27,10 @@ class Guest(TimestampedModel):
 
     class Meta:
         ordering = ["name"]
+        indexes = [
+            models.Index(fields=["event", "name"], name="idx_guest_event_name"),
+            models.Index(fields=["event", "-created_at"], name="idx_guest_event_created"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.name} ({self.event.name})"
